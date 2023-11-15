@@ -6,6 +6,18 @@
 */
 
 #include <bsq.h>
+#include <stdio.h>
+
+static const char *usage = """\
+USAGE\n\
+    ./bsq map\n\
+\n\
+DESCRIPTION\n\
+    Use a map to find the biggest square in it.\n\
+    The map is a file containing '.' for empty spaces and 'o' for obstacles.\n\
+    The first line of the map contains the number of lines and columns.\n\
+    The biggest square is represented by 'x'.\
+""";
 
 void mark_largest_square(char *map, size_t nb_cols, square_t largest_square)
 {
@@ -99,9 +111,13 @@ int bsq_solver(char *filepath)
 
 int bsq(int ac, char **av)
 {
-    if (ac != 2)
+    if (ac != 2) {
+        dprintf(2, "Invalid number of arguments.\n\n%s\n", usage);
         return (84);
-    else if (access(av[1], F_OK | R_OK) == -1) {
+    } else if (strcmp(av[1], "-h") == 0 || strcmp(av[1], "--help") == 0) {
+        dprintf(1, "%s\n", usage);
+        return (0);
+    } else if (access(av[1], F_OK | R_OK) == -1) {
         perror("BSQ");
         return (84);
     } else
